@@ -31,14 +31,13 @@ public class SMTPServerService {
         if (enabled.equalsIgnoreCase("true")) {
             SimpleMessageListenerImpl l = new SimpleMessageListenerImpl();
 
-            //
+            //使用不同的Factory实现不同的功能
             //SMTPAuthHandlerFactory smtpAuthHandlerFactory = new SMTPAuthHandlerFactory();
 
             UsernamePasswordValidatorImpl validator = new UsernamePasswordValidatorImpl();
             SMTPAuthHandlerFactory2 smtpAuthHandlerFactory2 = new SMTPAuthHandlerFactory2(validator);
 
-
-            smtpServer = new SMTPServer(new SimpleMessageListenerAdapter(l),smtpAuthHandlerFactory2);
+            smtpServer = new SMTPServer(new SimpleMessageListenerAdapter(l), smtpAuthHandlerFactory2);
             smtpServer.setHostName(this.hostName);
             smtpServer.setPort(Integer.valueOf(port));
             smtpServer.start();

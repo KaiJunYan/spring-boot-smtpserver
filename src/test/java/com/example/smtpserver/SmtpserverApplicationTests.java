@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@ContextConfiguration
+//@SpringBootTest
 public class SmtpserverApplicationTests {
 
     @Autowired
@@ -37,14 +37,15 @@ public class SmtpserverApplicationTests {
         email.send();
     }
 
+    //使用这个测试发送附件的邮件
     @Test
     public void sendEmailWithAttachment() throws EmailException {
         // Create the attachment
         EmailAttachment attachment = new EmailAttachment();
-        attachment.setPath("src/main/resources/application.xxxxxx");
+        attachment.setPath("src/main/resources/cloudServer.xlsx");
         attachment.setDisposition(EmailAttachment.ATTACHMENT);
-        attachment.setDescription("Image file");
-        attachment.setName("icon.gif");
+        attachment.setDescription("xlsx file");
+        attachment.setName("cloudServer.xlsx");
 
         // Create the email message
         MultiPartEmail email = new MultiPartEmail();

@@ -1,5 +1,6 @@
 package com.example.smtpservice;
 
+import com.example.eml.EmlUtils;
 import org.subethamail.smtp.helper.SimpleMessageListener;
 
 import java.io.*;
@@ -23,17 +24,27 @@ public class SimpleMessageListenerImpl implements SimpleMessageListener {
 
     @Override
     public void deliver(String from, String recipient, InputStream data) {
+        //查看inputstream 类型
+        //inputstream 类型:org.subethamail.smtp.io.ReceivedHeaderStream
+        System.out.println(" inputstream 类型:" + data.getClass().getName());
 
-        EmailModel model = new EmailModel();
-        model.setFrom(from);
-        model.setTo(recipient);
-        String mailContent = convertStreamToString(data);
-        model.setSubject(getSubjectFromStr(mailContent));
-        model.setEmailStr(mailContent);
-        System.out.println("=========== 邮件内容 ==========");
-        System.out.println(model);
-        //TODO 传递到其他地方
 
+        //封装到model    EmlUtils.parseInputStream(data); 前操作InputStream会导致无法保存附件
+//        EmailModel model = new EmailModel();
+//        model.setFrom(from);
+//        model.setTo(recipient);
+//        String mailContent = convertStreamToString(data);
+//        model.setSubject(getSubjectFromStr(mailContent));
+//        model.setEmailStr(mailContent);
+//        System.out.println("=========== 邮件内容 ==========");
+//        System.out.println(model);
+
+        //保存邮件附件
+        try {
+            EmlUtils.parseInputStream(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String convertStreamToString(InputStream is) {
@@ -72,22 +83,4 @@ public class SimpleMessageListenerImpl implements SimpleMessageListener {
         return "";
     }
 
-    public static void main(String[] args) {
-        Pattern SUBJECT_PATTERN = Pattern.compile("Subject: (.*?)-");
-        String line = "Subject: File attachment-MIME-Version";
-        Matcher matcher = SUBJECT_PATTERN.matcher(line);
-        if (matcher.find()) {
-            System.out.println(matcher.group(1));
-        }
-
-        String filetext = "//@张小名: 25分//@李小花: 43分//@王力: 100分";
-        Pattern p = Pattern.compile("\\@(.*?)\\:");//正则表达式，取=和|之间的字符串，不包括=和|
-        Matcher m = p.matcher(filetext);
-        while(m.find()) {
-//            m.group(0) 是包含那两个字符，m.group(1)  不包含那两个字符。
-            System.out.println(m.group(1));
-
-        }
-
-    }
 }
